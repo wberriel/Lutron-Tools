@@ -1,4 +1,2 @@
-# Lutron-Tools
-Collection of Tools I'm working on to manipulate xml files associated with Lutron.
-
-Still very preliminary. 
+# HomeworksQS-Tools
+A series of tools to work with Lutron Homeworks QS.
