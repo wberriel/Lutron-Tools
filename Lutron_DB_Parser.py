@@ -41,6 +41,7 @@ class LutronDBParser(object):
             print "%s :" % areaname
 
             # only bottom level Areas can have devices
+            # bottom level will have an empty "Areas" element
             if not len(list(node.find("Areas"))):
 
                 for devicegroup in node.iter("DeviceGroup"):
