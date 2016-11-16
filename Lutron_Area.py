@@ -9,6 +9,11 @@
 # Description   : This class will hold areas. Areas can contain either Areas or
 # Devices & Outputs, but not both.
 
+
+import Lutron_Device
+import Lutron_Output
+
+
 class Lutron_Area(object):
     """ Stores the Metadata, sub areas, devices, and outputs for an area."""
 
@@ -17,9 +22,8 @@ class Lutron_Area(object):
 
         self.Integration_ID = Integration_ID
         self.name = name
+        self.parent = None
 
-        self.areas = []
-        self.devices = []
-        self.outputs = []
-
-
+        self.areas = {}
+        self.devices = {}
+        self.outputs = {}
