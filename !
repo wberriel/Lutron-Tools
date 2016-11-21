@@ -16,7 +16,7 @@ try:
         import xmletree.cElementTree as ET
 except ImportError:
         import xml.etree.ElementTree as ET
-from Lutron_DB import Lutron_DB, Lutron_Area, Lutron_Device, Lutron_Output
+from Lutron_DB import Lutron_DB
 
 
 class Lutron_DB_Parser(object):
@@ -43,18 +43,20 @@ class Lutron_DB_Parser(object):
         # convert this to a recursive function
         for node in areas.iter("Area"):
             areaname = node.attrib.get("Name")
-            area_IntegrationID = node.attrib.get("IntegrationID")
+            area_Integration_ID = node.attrib.get("IntegrationID")
             tempArea = Lutron_Area(areaname, area_IntegrationID)
-            newDB.areas[area_IntegrationID] = tempArea
+            newDB.areas[area_Integration_ID] = tempArea
 
             # only bottom level Areas can have devices
             # bottom level will have an empty "Areas" element
             if not len(list(node.find("Areas"))):
 
                 for devicegroup in node.iter("DeviceGroup"):
+                    devGroupName = devicegroup.attrib.get("Name")
                     for device in devicegroup.iter("Device"):
 
                         device_Name = device.attrib.get("Name")
+                        device_Type = device.attrib.get("DeviceType")
                         device_IntegrationID = \
                             device.attrib.get("IntegrationID")
 
@@ -81,7 +83,27 @@ class Lutron_DB_Parser(object):
 
         return newDB
 
+    def printDevices(self):
+        root = self.DBTree.getroot()
+        areas = root.find("Areas")
+        for node in areas.iter("Area"):
+            areaname = node.attrib.get("Name")
+            print "%s :" % areaname
+
+            # only bottom level Areas can have devices
+            # bottom level will have an empty "Areas" element
+            if not len(list(node.find("Areas"))):
+
+                for devicegroup in node.iter("DeviceGroup"):
+                    devGroupName = devicegroup.attrib.get("Name")
+                    print "\t%s group:" % devGroupName
+                    for device in devicegroup.iter("Device"):
+                        devName = device.attrib.get("Name")
+                        devType = device.attrib.get("DeviceType")
+                        integrationID = device.attrib.get("IntegrationID")
+                        if(devName):
+                            print "\t\t%s - %s: ID = %s" % (devName, devType,
+                                                            integrationID)
 test = Lutron_DB_Parser.fromFile("eeny_demo.xml")
 newDB = test.createLutron_DB()
-
-print newDB
+test.printDevices()
